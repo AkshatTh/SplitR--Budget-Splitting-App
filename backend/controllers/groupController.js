@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Group = require('../models/Group');
 const User = require('../models/User');
-const Expense = require('../controllers/expenseController');
+const Expense = require('../models/Expense');
 
 const createGroup = asyncHandler(async (req, res) => {
   if (!req.body.name) {
@@ -27,7 +27,7 @@ const getGroups = asyncHandler(async (req, res) => {
 });
 
 const deleteGroup = asyncHandler(async (req, res) => {
-  const group = await group.findById(req.params.id);
+  const group = await Group.findById(req.params.id);
 
   if(!group) {
     res.status(404);
@@ -84,6 +84,7 @@ const removeMember = asyncHandler(async (req, res) => {
 
   const group = await Group.findById(groupId);
 
+  console.log('groupfound');
   if(!group) {
     res.status(404);
     throw new Error('404: Group not Found');

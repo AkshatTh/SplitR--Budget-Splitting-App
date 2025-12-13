@@ -11,6 +11,6 @@ router.post('/', protect, createGroup);
 router.get('/', protect, getGroups);
 router.put('/addmember', protect, addMember);
 router.delete('/:id' , protect, deleteGroup);
-router.delete('/removemember', protect, removeMember);
+router.put('/removemember', protect, removeMember);
 
 module.exports = router;
