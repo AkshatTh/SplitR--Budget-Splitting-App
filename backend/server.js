@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/groups', require('./routes/groupRoutes'));
+app.use('/api/expenses', require('./routes/expenseRoutes'));
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Welcome to the SplitR API' });
 });

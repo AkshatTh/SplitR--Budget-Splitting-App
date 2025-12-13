@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Group = require('../models/Group');
 const User = require('../models/User');
+const Expense = require('../controllers/expenseController');
 
 const createGroup = asyncHandler(async (req, res) => {
   if (!req.body.name) {
@@ -24,6 +25,26 @@ const getGroups = asyncHandler(async (req, res) => {
     .populate('members', 'name email');
   res.status(200).json(groups);
 });
+
+const deleteGroup = asyncHandler(async (req, res) => {
+  const group = await group.findById(req.params.id);
+
+  if(!group) {
+    res.status(404);
+    throw new Error('Group not Found');
+  }
+
+  if(group.createdBy.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('Unauthorized to Delete Group');
+  }
+
+  await Expense.deleteMany({group : req.params.id });
+  await Group.deleteOne();
+  
+  res.status(400).json({ id : req.params.id});
+});
+
 
 const addMember = asyncHandler(async (req, res) => {
   const { groupId, email } = req.body;
@@ -58,6 +79,30 @@ const addMember = asyncHandler(async (req, res) => {
 });
 
 
+const removeMember = asyncHandler(async (req, res) => {
+  const { groupId, memberId } = req.body;
+
+  const group = await Group.findById(groupId);
+
+  if(!group) {
+    res.status(404);
+    throw new Error('404: Group not Found');
+  }
+
+  if(group.createdBy.toString() !== req.user.id && memberId !== req.user.id) {
+    res.status(401);
+    throw new Error('User not Authorized to remove others');
+  }
+
+  group.members = group.members.filter(
+    (id) => id.toString() !== memberId
+  );
+
+
+  await group.save();
+
+  res.status(200).json(group);
+})
 
 
 
@@ -65,4 +110,6 @@ module.exports = {
   createGroup,
   getGroups,
   addMember,
+  deleteGroup,
+  removeMember,
 };
