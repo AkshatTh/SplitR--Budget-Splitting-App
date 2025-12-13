@@ -1,14 +1,13 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
 const PORT = 5000;
+const connectDB = require('./config/db');
+connectDB();
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-
-const connectDB = require('./config/db');
-
-connectDB();
-
+app.use('/api/users', require('./routes/userRoutes'));
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Welcome to the SplitR API' });
 });
