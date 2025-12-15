@@ -105,12 +105,34 @@ const removeMember = asyncHandler(async (req, res) => {
   res.status(200).json(group);
 })
 
+const getGroupById = asyncHandler(async (req, res) => {
+  const group = await Group.findById(req.params.id)
+    .populate('members', 'name email') 
+    .populate('createdBy', 'name')
 
+  if (!group) {
+    res.status(404)
+    throw new Error('Group not found')
+  }
+
+
+  const isMember = group.members.some(
+    (member) => member._id.toString() === req.user.id
+  )
+
+  if (!isMember) {
+    res.status(401)
+    throw new Error('Not authorized to view this group')
+  }
+
+  res.status(200).json(group)
+})
 
 module.exports = {
   createGroup,
   getGroups,
+  getGroupById, 
   addMember,
   deleteGroup,
   removeMember,
-};
+}

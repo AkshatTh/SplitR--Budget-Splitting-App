@@ -44,7 +44,7 @@ const getGroupExpenses = asyncHandler(async (req, res) => {
 
 
 const deleteExpense = asyncHandler(async (req, res) => {
-  const expense = await expense.findById(req.params.id);
+  const expense = await Expense.findById(req.params.id);
 
   if(!expense){
     res.status(404);
