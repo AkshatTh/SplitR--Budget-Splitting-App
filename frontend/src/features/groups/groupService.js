@@ -36,11 +36,18 @@ const addMember = async (groupId, email) => {
   return response.data
 }
 
+const deleteGroup = async (groupId) => {
+  const config = getConfig()
+  const response = await axios.delete(API_URL + groupId, config)
+  return response.data
+}
+
 const groupService = {
   createGroup,
   getGroups,
   getGroup, 
   addMember,
+  deleteGroup,
 }
 
 export default groupService
