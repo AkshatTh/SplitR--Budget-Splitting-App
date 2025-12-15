@@ -29,9 +29,18 @@ const getExpenses = async (groupId) => {
   return response.data
 }
 
+const deleteExpense = async (expenseId) => {
+  const config = getConfig()
+  // URL: /api/expenses/12345
+  const response = await axios.delete(API_URL + expenseId, config)
+  return response.data
+}
+
+
 const expenseService = {
   addExpense,
   getExpenses,
+  deleteExpense,
 }
 
 export default expenseService
