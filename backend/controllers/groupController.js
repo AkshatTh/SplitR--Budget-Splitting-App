@@ -39,10 +39,9 @@ const deleteGroup = asyncHandler(async (req, res) => {
     throw new Error('Unauthorized to Delete Group');
   }
 
-  await Expense.deleteMany({group : req.params.id });
-  await Group.deleteOne();
-  
-  res.status(400).json({ id : req.params.id});
+  await Expense.deleteMany({ group: req.params.id });
+  await group.deleteOne();   
+  res.status(200).json({ id: req.params.id });
 });
 
 
